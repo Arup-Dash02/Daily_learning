@@ -19,6 +19,8 @@ function CardWrapper({ children }) {
   );
 }
 
+//Just changed because want to be consistent
+
 // function TextComponent() {
 //   return <div>hi there</div>;
 // }
