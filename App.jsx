@@ -1,32 +1,42 @@
+import { useEffect } from "react";
+import { useState } from "react";
+
 function App() {
-  return (
-    // <div>
-    //   <CardWrapper innerComponent={<TextComponent />} />
-    //   {/* Int his way we can pass a component to another component */}
-    //   <CardWrapper innerComponent={<TextComponent2 />} />
-    // </div>
+  const [todos, setTodos] = useState([]);
+  //At first we have define a state named todos and intialized it to an empty array
 
-    // the above code is not a cleaner syntax to do that.We should always try to use the below syntax
-    <CardWrapper>hi there</CardWrapper>
-    //Int his way we should actually create wrapper in the real world
+  useEffect(() => {
+    //int this arrow function we can not define async so we have to use .then() because it returns promise
+    //to do async with useEffect, there is a library called useAsyncEffect is used
+    //Here we need to update the todos in every 10 seconds
+    setInterval(() => {
+      fetch("https://sum-server.100xdevs.com/todos").then(async function (res) {
+        const json = await res.json();
+        setTodos(json.todos);
+      });
+    }, 10000);
+  }, []);
+
+  return (
+    <div>
+      {todos.map((todo) => (
+        <Todo
+          key={todo.key}
+          title={todo.title}
+          description={todo.description}
+        />
+      ))}
+    </div>
   );
 }
 
-function CardWrapper({ children }) {
-  //here children have everything that are written insde the CardWrapper
+function Todo({ title, description }) {
   return (
-    <div style={{ border: "2px solid black", padding: 20 }}>{children}</div>
+    <div>
+      <h1>{title}</h1>
+      <h4>{description}</h4>
+    </div>
   );
 }
-
-//Just changed because want to be consistent
-
-// function TextComponent() {
-//   return <div>hi there</div>;
-// }
-
-// function TextComponent2() {
-//   return <div>hi there22222222</div>;
-// }
 
 export default App;
